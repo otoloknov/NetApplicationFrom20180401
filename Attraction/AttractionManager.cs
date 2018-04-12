@@ -20,17 +20,17 @@ namespace Attraction
     // --******************************************** 
     class AttractionManager
     {
-        private KidInitializing LisfOfKids { get; }
-        private AttractionInitialization ListOfOpenAttractions { get; }
+        private RandomKidGenerator LisfOfRandomKids { get; }
+        private RandomAttractionGenerator ListOfOpenRandomAttractions { get; }
         private Days WeekDay { get; }
         // Public constant for max value of cash box
         public const int MAX_VALUE_FOR_CASH_BOX = 300;
 
         // Public constructor Attraction manager with input paramteres as Kids + Attractions + Day
-        public AttractionManager(KidInitializing lisfOfKids, AttractionInitialization listOfOpenAttractions, Days day)
+        public AttractionManager(RandomKidGenerator lisfOfRandomKids, RandomAttractionGenerator listOfOpenRandomAttractions, Days day)
         {
-            LisfOfKids = lisfOfKids;
-            ListOfOpenAttractions = listOfOpenAttractions;
+            LisfOfRandomKids = lisfOfRandomKids;
+            ListOfOpenRandomAttractions = listOfOpenRandomAttractions;
             WeekDay = day;
         }
 
@@ -45,7 +45,7 @@ namespace Attraction
             kid.SetKidAction("Trying to get list of avaiable Attractions");
             
             // Try to find available attractions
-            foreach (var attraction in ListOfOpenAttractions.GetListOfRunningAttractions())
+            foreach (var attraction in ListOfOpenRandomAttractions.GetListOfGeneratedAttractions())
             {
                 // check is attraction avaivalbe for kid based in his/her parameters + day of week
                 if (attraction.DoValidation(kid, WeekDay))
@@ -73,18 +73,18 @@ namespace Attraction
 
             // Set Action for kid with attraction name and durations
             kids.SetKidAction("I'm staring to ride on => " + currentAttraction.Name + " for "+ currentAttraction.Duration +" sec");
-            kids.SetIsBusyStatus(true);
+            kids.SetBusyStatus(true);
             // Adding money to Global cash box
             currentAttraction.AddMoneyToCashBox();
             //Increase Kid satisfaction degree
             kids.ChangeSatisfactionDegree(rand.Next(10, 20));
             //Attraction payment 
-            kids.DeCreaseMoney(currentAttraction.Price);
+            kids.ChangeMoneyAmount(currentAttraction.Price);
             // Riding emulation by sleepinn on attraction duration x1000 (as Seconds)
             Thread.Sleep(currentAttraction.Duration*1000);
             // Then attraction finished - update status to Finished + free
             kids.SetKidAction("I've FINISHED to ride on => " + currentAttraction.Name);
-            kids.SetIsBusyStatus(false);
+            kids.SetBusyStatus(false);
         }
 
         // Implemented method - toRide
@@ -95,15 +95,14 @@ namespace Attraction
         //  4. if no available attraction - run method Kid.ToCry => + height + Delay??
         public void ToRide()
         {
-            int cashAmout = 0;
             //create separete thread for displaying kids status
-            ThreadPool.QueueUserWorkItem(LisfOfKids.PrintInformationAboutKids);
+            ThreadPool.QueueUserWorkItem(o => LisfOfRandomKids.PrintInformationAboutKids());
             // attraction will work until CashBox < MAX_VALUE_FOR_CASH_BOX 
             do
             {
                 // Attraction manager will check all kids in Queue one by one.
                 // added emulation of Manager work = sleep 1000
-                foreach (var kid in LisfOfKids.GetListOfKids())
+                foreach (var kid in LisfOfRandomKids.GetListOfGeneratedKids())
                 {
                     // if kid is still busy with another avtivity like Cry, Ride, etc. process will skip him
                     if (!kid.GetIsBusyStatus())
@@ -114,7 +113,7 @@ namespace Attraction
                         if (attractionToRide == null)
                         {
                             // if no available attraction for Kid - use method to Cry. 
-                            ThreadPool.QueueUserWorkItem(kid.ToCry);
+                            ThreadPool.QueueUserWorkItem(o => kid.ToCry());
                         }
                         else
                         {
@@ -134,17 +133,14 @@ namespace Attraction
                     // Manager work imitation
                     Thread.Sleep(1000);
 
-                    // get total amount of CashBox
-                    cashAmout = (int) typeof(Attraction).GetProperty("CashBox")?.GetValue(null, null);
-
                     // Stop attractions when total money in cash box will be more than MAX_VALUE_FOR_CASH_BOX
-                    if (cashAmout < MAX_VALUE_FOR_CASH_BOX) continue;
+                    if (Attraction.CashBox < MAX_VALUE_FOR_CASH_BOX) continue;
                     Console.Clear();
-                    Console.WriteLine("- - - Total CashBox value " + cashAmout);
+                    Console.WriteLine("- - - Total CashBox value " + Attraction.CashBox);
                     Console.WriteLine("- - - Stopping attractions - - - ");
                     break;
                 }
-            } while (cashAmout < MAX_VALUE_FOR_CASH_BOX);
+            } while (Attraction.CashBox < MAX_VALUE_FOR_CASH_BOX);
         }
     }
 }

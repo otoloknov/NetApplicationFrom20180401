@@ -3,7 +3,7 @@ using System.Configuration;
 
 namespace Attraction
 {
-    static class InputValidationHelper
+    static class ConsoleInputValidation
     {
         //check is correct day was eneter
         private static bool IsInWeekRange(int value)

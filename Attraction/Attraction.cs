@@ -11,7 +11,7 @@
         // Currently could be set up 3 type of Attractions ( name is unique )
         public string Name { get; }
         // Static int variable for collecting money ( Kid pay for attraction )
-        public static int CashBox {get ; set; }
+        public static int CashBox {get ; private set; }
 
         // Protected constructor for abstracted class Attraction.
         protected Attraction(string name, int price, int duration)
@@ -19,7 +19,6 @@
             Price = price;
             Duration = duration;
             Name = name;
-            CashBox = 0;
         }
 
         // "Tempalte" of method for all inheritence class. 
@@ -33,10 +32,6 @@
         }
 
         // Return static amount of CashBox
-        public int CheckCashBox()
-        {
-            return CashBox;
-        }
     }
 
     class Pony : Attraction

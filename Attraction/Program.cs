@@ -12,18 +12,18 @@ namespace Attraction
         static void Main()
         {
             // method for setting day of week from console input.
-            var day = InputValidationHelper.GetValidadedDayOfWeek();
+            var day = ConsoleInputValidation.GetValidadedDayOfWeek();
 
             // Initializing (generating) random parameters for 10 Kids.
-            KidInitializing groupKidInitializing = new KidInitializing();
+            var groupOfRandomKids = new RandomKidGenerator();
 
             // Initializing (generating) random parameters for attractions (Pony, Swan, Batman)
-            AttractionInitialization openAttractions = new AttractionInitialization();
+            var groupOfRandomAttractions = new RandomAttractionGenerator();
 
             //Create new Attraction Manager with already generated(prepared) data for Kids and Attractions
-            AttractionManager openAttractionManager = new AttractionManager(groupKidInitializing, openAttractions, day);
+            var generalAttractionManager = new AttractionManager(groupOfRandomKids, groupOfRandomAttractions, day);
             // open attraction
-            openAttractionManager.ToRide();
+            generalAttractionManager.ToRide();
 
             Console.ReadLine();
         }

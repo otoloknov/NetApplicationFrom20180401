@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.Eventing.Reader;
-using System.Threading;
+﻿using System.Threading;
 
 namespace Attraction
 {
@@ -52,7 +50,7 @@ namespace Attraction
         // when kid is crying next conditions should be applied.
         // height +2
         // satisfaction -5
-        public void ToCry(Object i)
+        public void ToCry()
         {
             // Update kid action in correct value based on method call
             SetKidAction("No available Attractions! Will cry now...");
@@ -74,7 +72,7 @@ namespace Attraction
             SatisfactionDegree += level;
         }
 
-        public void DeCreaseMoney(int money)
+        public void ChangeMoneyAmount(int money)
         {
             Money -= money;
         }
@@ -107,7 +105,7 @@ namespace Attraction
         {
             return IsBusyForNextActions;
         }
-        public void SetIsBusyStatus(bool isBusy)
+        public void SetBusyStatus(bool isBusy)
         {
             IsBusyForNextActions = isBusy;
         }

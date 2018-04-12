@@ -49,16 +49,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attraction.cs" />
-    <Compile Include="AttractionInitialization.cs" />
+    <Compile Include="RandomAttractionGenerator.cs" />
     <Compile Include="AttractionManager.cs" />
-    <Compile Include="InputValidationHelper.cs" />
+    <Compile Include="ConsoleInputValidation.cs" />
     <Compile Include="Kid.cs" />
-    <Compile Include="KidInitializing.cs" />
+    <Compile Include="RandomKidGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

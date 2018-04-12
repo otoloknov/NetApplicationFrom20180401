@@ -9,7 +9,7 @@ namespace Attraction
 {
     // Internal class for Kid generation (Initialization)
     // Singelton is better? Maybe not in this case?
-    class KidInitializing
+    class RandomKidGenerator
     {
         // List of Names for ( M + F )
         private enum ListOfWonamNames { Ardath = 1, Alyce, Fermina, Emily, Ronna, Erminia, Sheryl, Shanita, Lecia, Leonor }
@@ -18,7 +18,7 @@ namespace Attraction
         private readonly List<Kid> _kidList = new List<Kid>();
 
         // public constructor for Kid generation 
-        public KidInitializing()
+        public RandomKidGenerator()
         {
             Random rand = new Random();
             
@@ -41,7 +41,7 @@ namespace Attraction
         // return list of generated Kids
         // out type: List<Kid>
         // how to use Singelton here?
-        public List<Kid> GetListOfKids()
+        public List<Kid> GetListOfGeneratedKids()
         {
             return _kidList;
         }
@@ -70,20 +70,20 @@ namespace Attraction
         }
 
         // Print information run in separete thread until cash box will be not full
-        public void PrintInformationAboutKids(Object i)
+        public void PrintInformationAboutKids()
         {
             do
             {
                 // Clean console
                 Console.Clear();
-                Console.WriteLine("CashBox = {0}", (int)typeof(Attraction).GetProperty("CashBox").GetValue(null, null));
+                Console.WriteLine("CashBox = {0}", Attraction.CashBox);
                 //ConsoleTableBuilder was loaded from NuGet
                 ConsoleTableBuilder
                     .From(GetSampleTableData())
                     .ExportAndWriteLine();
                 // need to have some kind on delay
                 Thread.Sleep(100);
-            } while ((int) typeof(Attraction).GetProperty("CashBox").GetValue(null, null) < AttractionManager.MAX_VALUE_FOR_CASH_BOX);
+            } while (Attraction.CashBox < AttractionManager.MAX_VALUE_FOR_CASH_BOX);
         }
     }
 }

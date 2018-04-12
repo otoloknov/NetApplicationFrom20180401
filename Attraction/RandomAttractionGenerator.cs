@@ -4,10 +4,10 @@ using System.Collections.Generic;
 namespace Attraction
 {
     // use only for internal Attraction generation 
-    class AttractionInitialization
+    class RandomAttractionGenerator
     {
         readonly List<Attraction> _attraction = new List<Attraction>();
-        public AttractionInitialization()
+        public RandomAttractionGenerator()
         {
             Random rand = new Random();
             _attraction.Add(new Pony("Pony Strong",rand.Next(15, 20),rand.Next(6, 10)));
@@ -18,7 +18,7 @@ namespace Attraction
             _attraction.Add(new Swan("Swan Low", rand.Next(10, 15), rand.Next(2, 6)));
         }
 
-        public List<Attraction> GetListOfRunningAttractions()
+        public List<Attraction> GetListOfGeneratedAttractions()
         {
             return _attraction;
         }
