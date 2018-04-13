@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace Attraction
@@ -39,21 +40,16 @@ namespace Attraction
         private Attraction GetRandomValidAttractionForKid(Kid kid)
         {
             // using for store ALL available attraction ( based on rules/ condition ) related to current Kid.
-            List<Attraction> listOfAvailableAttractionForKid = new List<Attraction>();
-            Random rand = new Random();
+            var rand = new Random();
 
             kid.SetKidAction("Trying to get list of avaiable Attractions");
             
             // Try to find available attractions
-            foreach (var attraction in ListOfOpenRandomAttractions.GetListOfGeneratedAttractions())
-            {
-                // check is attraction avaivalbe for kid based in his/her parameters + day of week
-                if (attraction.DoValidation(kid, WeekDay))
-                {
-                    // If attraction available - add to list
-                    listOfAvailableAttractionForKid.Add(attraction);
-                }
-            }
+            var listOfAvailableAttractionForKid = 
+                    ListOfOpenRandomAttractions.GetListOfGeneratedAttractions()
+                    .Where(attraction => attraction.DoValidation(kid, WeekDay))
+                    .ToList();
+
             // return null Or Random attraction.
             // null - if there no available attraction for Kid.
             // Random attraction calculated as Random LIST index for all available attractions for 1 kid.
@@ -67,21 +63,26 @@ namespace Attraction
 
         // Method RidingOnAttractions use for riding emulation.
         // Method will call from ToRide() in separete thread based on logic from ThreadPool.QueueUserWorkItem
-        private void RidingOnAttractions(Kid kids, Attraction currentAttraction)
+        private static void RidingOnAttractions(Kid kids, Attraction currentAttraction)
         {
-            Random rand = new Random();
+            var rand = new Random();
 
             // Set Action for kid with attraction name and durations
             kids.SetKidAction("I'm staring to ride on => " + currentAttraction.Name + " for "+ currentAttraction.Duration +" sec");
             kids.SetBusyStatus(true);
+
             // Adding money to Global cash box
             currentAttraction.AddMoneyToCashBox();
+
             //Increase Kid satisfaction degree
             kids.ChangeSatisfactionDegree(rand.Next(10, 20));
+
             //Attraction payment 
             kids.ChangeMoneyAmount(currentAttraction.Price);
+
             // Riding emulation by sleepinn on attraction duration x1000 (as Seconds)
             Thread.Sleep(currentAttraction.Duration*1000);
+
             // Then attraction finished - update status to Finished + free
             kids.SetKidAction("I've FINISHED to ride on => " + currentAttraction.Name);
             kids.SetBusyStatus(false);

@@ -20,7 +20,7 @@ namespace Attraction
         // public constructor for Kid generation 
         public RandomKidGenerator()
         {
-            Random rand = new Random();
+            var rand = new Random();
             
             for (int i = 0; i < 2; i++)
             {
@@ -49,7 +49,7 @@ namespace Attraction
         // fucntion that return DataTable type based on structure below
         private DataTable GetSampleTableData()
         {
-            DataTable table = new DataTable();
+            var table = new DataTable();
             // adding list of columns
             table.Columns.Add("Name", typeof(string));
             table.Columns.Add("Height", typeof(string));

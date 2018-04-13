@@ -56,11 +56,14 @@ namespace Attraction
             SetKidAction("No available Attractions! Will cry now...");
             // Kid is busy not - he/she is crying 
             IsBusyForNextActions = true;
+            
             //Imitation of crying in separate thread.
             Thread.Sleep(5000);
+            
             //After crying update parameters for a new one.
             Height += INCREASE_HEIGHT_WHEN_CRY;
             SatisfactionDegree -= DECREASE_SATISFACTION_WHEN_CRY;
+            
             //update status of activity.
             SetKidAction("Stop crying! New Parameters - H:"+ Height + ",SD:"+SatisfactionDegree);
             // Kid is free 
